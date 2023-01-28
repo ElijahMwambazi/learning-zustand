@@ -1,6 +1,11 @@
 import { Fragment } from "react";
 
 import useCourseStore from "../stores/course-store.store";
+import {
+  ListItemCheckBox,
+  ListItems,
+  Listitem,
+} from "../global.styles";
 
 const CourseList = () => {
   const {
@@ -11,44 +16,39 @@ const CourseList = () => {
 
   return (
     <>
-      <ul>
-        {courses.map((course) => {
-          return (
-            <Fragment key={course.id}>
-              <li
-                className={`course-item`}
-                style={{
-                  backgroundColor:
-                    course.completed
-                      ? "green"
-                      : "white",
-                }}
-              >
-                <span className="course-item-col-1">
-                  <input
-                    checked={course.completed}
+      <ListItems>
+        {courses.map(
+          ({ id, title, completed }) => {
+            return (
+              <Fragment key={id}>
+                <Listitem
+                  className="course-item"
+                  completed={completed}
+                >
+                  <ListItemCheckBox
+                    checked={completed}
                     type="checkbox"
                     onChange={(e) => {
-                      toggleCourseStatus(
-                        course.id
-                      );
+                      toggleCourseStatus(id);
                     }}
                   />
-                </span>
-                <span>{course?.title}</span>
-                <button
-                  onClick={() => {
-                    removeCourse(course.id);
-                  }}
-                  className="delete-btn"
-                >
-                  Delete
-                </button>
-              </li>
-            </Fragment>
-          );
-        })}
-      </ul>
+                  <span className="course-item-col-2">
+                    <span>{title}</span>
+                    <button
+                      onClick={() => {
+                        removeCourse(id);
+                      }}
+                      className="delete-btn"
+                    >
+                      Delete
+                    </button>
+                  </span>
+                </Listitem>
+              </Fragment>
+            );
+          }
+        )}
+      </ListItems>
     </>
   );
 };
