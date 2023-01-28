@@ -15,16 +15,19 @@ const CourseForm = () => {
     setCourseTitle(e.target.value);
   };
 
+  const courseTitleExists = courses.map(
+    (course: Course) =>
+      course.title === courseTitle
+  );
+
   const handleCourseSubmit = () => {
     if (!courseTitle)
-      return alert("please add a course title");
+      return alert("Please add a course title");
 
-    courses.find((course: Course) => {
-      if (course.title === courseTitle)
-        return alert(
-          "A course with the same title has already been added"
-        );
-    });
+    if (courseTitleExists)
+      return alert(
+        "A course with the same title has already been added"
+      );
 
     addCourse({
       id: uuidV4(),
@@ -36,7 +39,10 @@ const CourseForm = () => {
   };
 
   return (
-    <div className="form-container">
+    <form
+      className="form-container"
+      onSubmit={handleCourseSubmit}
+    >
       <input
         className="form-input"
         value={courseTitle}
@@ -44,14 +50,11 @@ const CourseForm = () => {
       />
       <button
         type="submit"
-        onClick={() => {
-          handleCourseSubmit();
-        }}
         className="form-submit-btn"
       >
-        Add Course
+        Add To List
       </button>
-    </div>
+    </form>
   );
 };
 
