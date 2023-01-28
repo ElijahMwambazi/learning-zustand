@@ -1,11 +1,13 @@
 import { ChangeEvent, useState } from "react";
 import { v4 as uuidV4 } from "uuid";
-import useCourseStore from "../stores/course-store.store";
+import useCourseStore, {
+  Course,
+} from "../stores/course-store.store";
 
 const CourseForm = () => {
   const [courseTitle, setCourseTitle] =
     useState("");
-  const { addCourse } = useCourseStore();
+  const { addCourse, courses } = useCourseStore();
 
   const onChangeHandler = (
     e: ChangeEvent<HTMLInputElement>
@@ -17,11 +19,19 @@ const CourseForm = () => {
     if (!courseTitle)
       return alert("please add a course title");
 
+    courses.find((course: Course) => {
+      if (course.title === courseTitle)
+        return alert(
+          "A course with the same title has already been added"
+        );
+    });
+
     addCourse({
       id: uuidV4(),
       title: courseTitle,
       completed: false,
     });
+
     setCourseTitle("");
   };
 
